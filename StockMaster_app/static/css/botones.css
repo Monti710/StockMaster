@@ -1,0 +1,133 @@
+/*Botones*/
+.elimina a{
+    width: 50px;
+    height: auto;
+    color: #fff;
+}
+.elimina a{
+    padding: 10px 15px;
+    background-color: #ff0000;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 300ms ease;
+    
+}
+.elimina a:hover{
+  padding: 10px 15px;
+  background-color: #930404;
+  color: white;
+  transform: scale(1.3);
+}
+
+.edita {
+    width: 64px;
+    height: auto;
+}
+.edita a{
+    padding: 10px 15px;
+    background-color: #5488a3;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 300ms ease;
+    
+}
+.edita a:hover{
+  padding: 10px 15px;
+  background-color: #185E83;
+  transform: scale(1.3);
+  color: white;
+}
+
+main  .recent-orders .btn-registrar{
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--color-primary);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 1rem auto;
+}
+main  .recent-orders .btn-registrar:hover{
+    background-color: var(--color-primary-variant);
+
+}
+
+.check input[type="checkbox"] {
+    height: 0;
+    width: 0;
+    top: -1rem;
+    visibility: hidden;
+    border: 0.2rem solid var(--color-dark);
+  }
+  
+  .check label {
+    top: -1rem;
+    cursor: pointer;
+    text-indent: -9999px;
+    width: 60px;
+    height: 30px;
+    background: transparent;
+    display: block;
+    border-radius: 100px;
+    position: relative;
+    border: 0.2rem solid var(--color-dark);
+  }
+  
+  .check label:after {
+    content: '';
+    position: absolute;
+    top: 0.3rem;
+    left: 0.4rem;
+    width: 16px;
+    height: 16px;
+    background: var(--color-dark);
+    border-radius: 90px;
+    transition: 0.3s;
+  }
+  
+  .check input[type="checkbox"]:checked + label {
+    background: rgb(3, 183, 78);
+    border: 0.2rem solid var(--color-dark);
+  }
+  
+  .check input[type="checkbox"]:checked + label:after {
+    left: calc(100% - 0.4rem);
+    transform: translateX(-100%);
+    background: white;
+  }
+
+.edit-button{
+  /* box-shadow: var(--color-light) 0px 10px 20px, var(--color-light) 0px 6px 6px; */
+  box-shadow: var(--color-light) 0px 2px 4px, var(--color-light) 0px 7px 13px -3px, var(--color-light) 0px -3px 0px inset;
+  border-radius: 0.5rem;
+  align-items: center;
+  display: flex;
+  padding: 0.1rem;
+  margin-top: -0.4rem;
+  color: var(--color-dark);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.edit-button:hover{
+  cursor: pointer;
+  color: white;
+  background-color: blue;
+  box-shadow: var(--color-light) 0px 2px 4px, var(--color-light) 0px 7px 13px -3px, var(--color-light) 0px -3px 0px inset;
+  /* box-shadow: var(--color-light) 0px 10px 20px, var(--color-light) 0px 6px 6px; */
+}
+
+.botones{
+  display: flex; 
+  justify-content: center;
+}
+
+
+  
+  

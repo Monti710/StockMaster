@@ -1,0 +1,114 @@
+{% extends "./base.html" %}
+{% block body %}
+{% load static %}
+
+<div class="right-v2" >
+    <div class="top">
+        <div class="tema">
+            <button id="menu-btn"><span class="material-symbols-outlined">menu</span>
+            </button>
+            <button id="themeToggleBtn" >
+                <i id="sunIcon" class="fas fa-sun"></i>
+                <i id="moonIcon" class="fas fa-moon"></i>
+            </button>
+        </div>
+        <div class="profile">
+            {% if request.user.is_authenticated %}
+                <div class="info">
+                    <p>Hola, <b>{{ user.username}}</b> </p>
+                    <p style="text-align: center;">
+                        BIENVENIDO
+                    </p>
+                </div>
+                <div class="profile-photo">
+                    {% for user in usuarios %}
+                        {% if user.id_id == request.user.id %}
+                            {% if user.imagen %}
+                                <img class="fa-solid fa-user-tie"src="{{ user.imagen_url }}" alt="Imagen del usuario">
+                            {% else %}
+                                <p>No hay imagen disponible.</p>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>  
+</div>
+
+<main>
+    <h1>Recuperación.</h1>
+    <div class="recent-orders">
+        <div class="principal">
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Buscar productos..." oninput="convertToUppercase()">
+                <i class="fas fa-search" id="search-icon"></i>
+            </div>
+            <br><br>
+        </div>
+        <br>
+        <div class="messages-container">
+            {% for message in messages %}
+                <div class="alert alert-custom" role="alert">
+                    <strong>{{ message }}</strong>
+                    <button type="button" class="btn-close" aria-label="Close" onclick="dismissMessage(this)"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            {% endfor %}
+        </div>
+        <br>
+        <h2>Proveedores</h2>
+        <div class="mensaje-oculto">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Proveedor</th>
+                        <th>Contacto</th>
+                        <th>Elimino Usuario</th>
+                        <th>Fecha</th>
+                        <th colspan="2">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in proveedores %}
+                        {% if c.status %}
+
+                        {% else %}
+                            <tr>
+                                
+                                <td>{{forloop.counter}}</td>
+                                <td>{{ c.nombre }} </td>
+                                <td>{{ c.contacto }}</td>
+                                <td>{{ c.username }}</td>
+                                <td>{{ c.fecha_edit}}</td>
+                                <td>
+                                    <div class="botones">
+                                        <div class="edita">
+                                            <a href="cambio_statusrepro/{{ c.idProveedor }}" class="btn btn-info btnRecuperarProv">                                 
+                                                <span class="material-symbols-outlined">restart_alt</span>
+                                            </a>
+                                        </div>
+                                        <div class="elimina">
+                                            <a href="eliminaProveedor/{{c.idProveedor}}" class="btn btn-danger btnEliminacionProv">
+                                                <span class="material-symbols-outlined">delete</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="no-disponible oculto">
+            <div style="display:flex; justify-content: center; align-items: center;">
+                <img style="width: 15%; margin-top: -1rem;" src="{% static 'productos/img/prov.svg' %}">
+            </div>
+            <p style="font-size: 1.2rem; font-weight: 400;">Ningun proveedor se ha dado de baja.</p>
+        </div>
+    </div>
+
+</main>
+
+{% endblock %}

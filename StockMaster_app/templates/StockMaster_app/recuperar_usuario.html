@@ -1,0 +1,146 @@
+{% extends "./base.html" %}
+{% block body %}
+{% load static %}
+
+<div class="right-v2" >
+    <div class="top">
+        <div class="tema">
+            <button id="menu-btn"><span class="material-symbols-outlined">menu</span>
+            </button>
+            <button id="themeToggleBtn" >
+                <i id="sunIcon" class="fas fa-sun"></i>
+                <i id="moonIcon" class="fas fa-moon"></i>
+            </button>
+        </div>
+        <div class="profile">
+            {% if request.user.is_authenticated %}
+                <div class="info">
+                    <p>Hola, <b>{{ user.username}}</b> </p>
+                    <p style="text-align: center;">
+                        BIENVENIDO
+                    </p>
+                </div>
+                <div class="profile-photo">
+                    {% for user in usuarios %}
+                        {% if user.id_id == request.user.id %}
+                            {% if user.imagen %}
+                                <img class="fa-solid fa-user-tie"src="{{ user.imagen_url }}" alt="Imagen del usuario">
+                            {% else %}
+                                <p>No hay imagen disponible.</p>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>  
+</div>
+<main>
+    <h1>Recuperación.</h1>
+    <div class="recent-orders">
+        
+        <div class="principal">
+            <br><br><br>
+            <div class="search-bar-v3">
+                <input type="text" id="search-input" placeholder="Buscar usuarios..." oninput="convertToUppercase()">
+                <i class="fas fa-search" id="search-icon"></i>
+            </div>
+        </div>
+        <div class="messages-container">
+            {% for message in messages %}
+                <div class="alert alert-custom" role="alert">
+                    <strong>{{ message }}</strong>
+                    <button type="button" class="btn-close" aria-label="Close" onclick="dismissMessage(this)"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            {% endfor %}
+        </div><br><br>
+        <div style="overflow:auto; height: 46rem;">
+            <div class="mensaje-oculto">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Nombre</th>
+                            <th>Gmail</th>
+                            <th>Imagen</th>
+                            <th colspan="2">Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for us in usuarios %}
+                            {% if us != request.user%}
+                                {%if us.id.is_active == 0%}
+                                    <tr>
+                                        <td>{{ us.id.username }} </td>
+                                        <td>{{ us.id.first_name }} {{ us.id.last_name }}</td>
+                                        <td>{{ us.id.email }}</td>
+                                        <td class="imagen" style="position: relative;">
+                                            <div class="img-container" style="width: 100px; height: 100px;">
+                                                <img src="{{ us.imagen_url }}" style="width: 150px; max-height: auto; transition: transform 0.3s; position: absolute; top: 0; left: 20%;">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="botones">
+                                                <div class="edita edit-product-button">
+                                                    <a class=" btn btn-info btnRecuperarProv" href="recuperar/{{us.id.id}}">
+                                                        <span class="material-symbols-outlined">restart_alt</span>
+                                                    </a>
+                                                </div>
+                                                <div class="elimina">
+                                                    <a class="btn btn-danger btnEliminacionUsua" href="eliminaruser/{{us.id.id}}">
+                                                        <span class="material-symbols-outlined">delete</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="no-disponible oculto">
+                <div style="display:flex; justify-content: center; align-items: center;">
+                    <img style="width: 20%;" src="{% static 'productos/img/user-dele.svg' %}">
+                </div>
+                <p style="font-size: 1.2rem; font-weight: 400;">Sin usuarios dados de baja actualmente.</p>
+            </div>
+        </div>
+    </div>
+
+
+</main>
+
+
+<script>
+    // Obtén todos los elementos con la clase "close-btn"
+    var closeBtns = document.querySelectorAll('.close-btnn');
+
+    // Agrega un evento de clic a cada elemento
+    closeBtns.forEach(function (closeBtn) {
+        closeBtn.addEventListener('click', function () {
+            // Oculta el elemento al hacer clic
+            closeBtn.style.display = 'none';
+        });
+    });
+</script>
+<script>
+    function previsualizarImagen() {
+        var cargador = document.getElementById('imagen');
+        var vistaPrevia = document.getElementById('vistaPrevia');
+        
+        var archivo = cargador.files[0];
+        if (archivo) {
+            var lector = new FileReader();
+
+            lector.onload = function(e) {
+                vistaPrevia.src = e.target.result;
+            }
+
+            lector.readAsDataURL(archivo);
+        }
+    }
+</script>
+
+{% endblock %}

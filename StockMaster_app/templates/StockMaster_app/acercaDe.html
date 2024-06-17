@@ -1,0 +1,107 @@
+{% extends "./base.html" %}
+{% block body %}
+{% load static %}
+<div class="right-v2" >
+    <div class="top">
+        <div class="tema">
+            <button id="menu-btn"><span class="material-symbols-outlined">menu</span>
+            </button>
+            <button id="themeToggleBtn" >
+                <i id="sunIcon" class="fas fa-sun"></i>
+                <i id="moonIcon" class="fas fa-moon"></i>
+            </button>
+        </div>
+        <div class="profile">
+            {% if request.user.is_authenticated %}
+                <div class="info">
+                    <p>Hola, <b>{{ user.username}}</b> </p>
+                    <p style="text-align: center;">
+                        BIENVENIDO
+                    </p>
+                </div>
+                <div class="profile-photo">
+                    {% for user in usuarios %}
+                        {% if user.id_id == request.user.id %}
+                            {% if user.imagen %}
+                                <img class="fa-solid fa-user-tie"src="{{ user.imagen_url }}" alt="Imagen del usuario">
+                            {% else %}
+                                <p>No hay imagen disponible.</p>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>  
+</div>
+<main>
+    <h1></h1>
+    <div class="recent-orders">
+        <div class="area">
+            <ul class="circles">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <div class="enunciado">
+                <h1 class="texto">STOCKMASTER</h1>
+            </div>
+        </div>
+        
+        <div class="content-prin">
+            <div class="nosotros">
+                <div class="prop1">
+                    <h2 class="pro2">¿QUIÉNES SOMOS?</h2>
+                    <p class="part1">
+                        En StockMaster, nos dedicamos a la resolución de problemas para nuestros clientes. 
+                    </p>
+                    <p class="part2">
+                        Con un equipo de desarrolladores altamente capacitados en software y servicio al cliente, nos comprometemos a ofrecer soluciones innovadoras que impulsen el éxito de nuestros usuarios.
+                    </p>
+
+                    <p class="part3">
+                        Nuestra metodología comienza con una profunda inmersión en las necesidades de nuestros clientes. A través de entrevistas, encuestas y análisis de datos, creamos un diálogo continuo para entender completamente sus desafíos.
+                    </p>
+                    <br>       
+                </div>
+                <div class="derecha">
+                    <img class="logo" src="{% static 'productos/img/help.svg' %}">
+                </div>
+            </div>
+            <div class="titulo-apartado">
+                <h1 class="pro2">OBJETIVOS</h1>
+            </div>
+            <div class="iconsPar">
+                <div class="aspectos">
+                    <img class="carac" src="{% static 'productos/img/relation.png' %}">
+                    <p class="desc">
+                        Comprender las necesidades del cliente
+                    </p>
+                </div>
+                <div class="aspectos">
+                    <img class="carac2" src="{% static 'productos/img/solution.png' %}">
+                    <p class="desc">
+                        Proponer soluciones efectivas
+                    </p>
+                </div>
+                <div class="aspectos">
+                    <img class="carac3" src="{% static 'productos/img/work.png' %}">
+                    <p class="desc">
+                        Colaborar estrechamente con clientes
+                    </p>
+                </div>
+            </div>
+            <div class="privacity">
+                <a class="term" href="{% url 'terminosCon' %}">Terminos y condiciones</a>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

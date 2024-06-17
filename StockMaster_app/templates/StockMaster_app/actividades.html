@@ -1,0 +1,297 @@
+{% extends "./base.html" %}
+{% block body %}
+{% load static %}
+<div class="ctn">
+    <main>
+        <h1>Entrada de Productos</h1>
+        <div width="50" height="50">
+            <canvas id="myChartt" style="display: block; box-sizing: border-box;"></canvas>
+        </div>
+        <script>
+            const canvas1 = document.getElementById('myChartt');
+            canvas1.width = 200;
+            canvas1.height = 200;
+        
+            const Utils = {
+                months: ({ count }) => {
+                    const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+                    return monthNames.slice(0, count);
+                },
+            };
+            const labels = Utils.months({ count: 12 });
+            const data1 = {
+                labels: labels,
+                datasets: [{
+                    label: 'Entrada de Productos',
+                    data: {{ data|safe }},
+                    backgroundColor: 'rgba(26, 206, 192)',
+                    borderColor: 'rgba(26, 206, 192)',
+                    borderWidth: 1
+                }]
+            };
+        
+            const config1 = {
+                type: 'bar',
+                data: data1,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    maintainAspectRatio: false,
+                    aspectRatio: 1,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            fullWidth: true,
+                            fontSize: 12
+                        }
+                    }
+                },
+            };
+            const ctx1 = canvas1.getContext('2d');
+            const myChartt = new Chart(ctx1, config1);
+        </script>
+        
+        <br>
+        <div class="mitad">
+            <div>
+                <h1>Cantidad de Productos</h1>
+                <div width="50" height="50">
+                    <canvas id="myChart" style="display: block; box-sizing: border-box;"></canvas>
+                </div>
+                <script>
+                    const canvas2 = document.getElementById('myChart');
+                    canvas1.width = 100;
+                    canvas1.height = 100;
+
+                    const data2 = {
+                        labels: [
+                            {% for c in CategoriaListados %}'{{ c.nombre }}',{% endfor %},
+                        ],
+                        datasets: [{
+                            label: 'Son',
+                            data: [{% for cantidad in cantidad_productos_cate %}
+                                        {{ cantidad.cantidad }},
+                                    {% endfor %},],
+                            backgroundColor: [
+                                'rgb(255, 99, 132)',
+                                'rgb(75, 192, 192)',
+                                'rgb(255, 205, 86)',
+                                'rgb(201, 203, 207)',
+                            ]
+                        }]
+                    };
+                    const config2 = {
+                        type: 'polarArea',
+                        data: data2,
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            },
+                            maintainAspectRatio: false,
+                            aspectRatio: 1,
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'top',
+                                    fullWidth: true,
+                                    fontSize: 12
+                                }
+                            }
+                        }
+                    };
+                    const ctx2 = canvas2.getContext('2d');
+                    const myChart = new Chart(ctx2, config2);
+                </script>
+            </div>
+            <div>
+                <h1>Productos en Categoria</h1>
+                <div width="50" height="50">
+                    <canvas id="myChart3" style="display: block; box-sizing: border-box;"></canvas>
+                </div>
+                <script>
+                    const canvas3 = document.getElementById('myChart3');
+                    canvas1.width = 100;
+                    canvas1.height = 100;
+
+                    const data3 = {
+                        labels: [
+                            {% for c in CategoriaListados %}'{{ c.nombre }}',{% endfor %},
+                        ],
+                        datasets: [{
+                            label: 'Son',
+                            data: [{% for cantidad in productos_por_categoria %}
+                                    {{ cantidad }},
+                                {% endfor %},],
+                            backgroundColor: [
+                                'rgb(255, 99, 132)',
+                                'rgb(75, 192, 192)',
+                                'rgb(255, 205, 86)',
+                                'rgb(201, 203, 207)',
+                            ]
+                        }]
+                    };
+                    const config3 = {
+                        type: 'polarArea',
+                        data: data3,
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            },
+                            maintainAspectRatio: false,
+                            aspectRatio: 1,
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'top',
+                                    fullWidth: true,
+                                    fontSize: 12
+                                }
+                            }
+                        }
+                    };
+                    const ctx3 = canvas3.getContext('2d');
+                    const myChart3 = new Chart(ctx3, config3);
+                </script>
+            </div>
+        </div>
+        
+    </main>
+    <div class="right" >
+        <div class="top">
+            <div class="tema">
+                <button id="menu-btn"><span class="material-symbols-outlined">menu</span>
+                </button>
+                <button id="themeToggleBtn" >
+                    <i id="sunIcon" class="fas fa-sun"></i>
+                    <i id="moonIcon" class="fas fa-moon"></i>
+                </button>
+            </div>
+            <div class="profile">
+                {% if request.user.is_authenticated %}
+                    <div class="info">
+                        <p>Hola, <b>{{ user.username}}</b> </p>
+                        <p style="text-align: center;">
+                            BIENVENIDO
+                        </p>
+                    </div>
+                    <div class="profile-photo">
+                            {% for user in usuarios %}
+                                {% if user.id_id == request.user.id %}
+                                    {% if user.imagen %}
+                                        <img class="fa-solid fa-user-tie"src="{{ user.imagen_url }}" alt="Imagen del usuario">
+                                    {% else %}
+                                        <p>No hay imagen disponible.</p>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="recent-updates">
+            <h2>Mensajes Recientes</h2>
+            <div class="updates">
+                {% if perms.StockMaster_app.view_mensajes %}
+                    {% if Mensajes %}
+                        {% if respuestascomentarios %}
+                            <p>respuestas comentarios </p>
+                        {% else %}
+                            {% for me in Mensajes|dictsortreversed:"tiempo_creacion"|slice:":4" %}
+                                {% if me.respuestascomentarios%}
+                                    <div class="message">
+                                        <div class="icon" style="color: green">
+                                            <span class="material-symbols-outlined">forward</span>
+                                        </div>
+                                            <p><b>{{ me.username }}: </b><br> {{ me.comentario }}</p>
+                                        <small class="text-muted" style="font-size: 11px;">Mensaje contestado</small>
+                                    </div>
+                                {% else %}
+                                    <div class="message">
+                                        <div class="icon" style="color: red">
+                                            <span class="material-symbols-outlined">mark_email_unread</span>
+                                        </div>
+                                        <p><b>{{ me.username }}: </b><br> {{ me.comentario }}</p>
+                                        <small class="text-muted">{{ me.tiempo_creacion }}</small>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% else %}
+                        <p>No hay mensajes disponibles en este momento.</p>
+                    {% endif %}
+            </div>
+            <div class="add-products">
+                <div>
+                    <span class="material-symbols-outlined">add</span> 
+                    <a href="{% url 'soporte' %}">Mostrar Todas</a>
+                </div>
+            </div>
+                {% else %}
+                    {% if Mensajes %}
+                        {% for me in Mensajes|dictsortreversed:"tiempo_creacion"|slice:":4" %}
+                            {% if me.respuestascomentarios %}
+                                {% if me.username == request.user.username %}
+                                    
+                                    <div class="message">
+                                        <div class="icon" style="color: green">
+                                            <span class="material-symbols-outlined">forward</span>
+                                        </div>
+                                            <b>Comentario:</b>
+                                            <p>{{me.comentario}}</p>
+                                            <b>Respuesta del Admin: </b>
+                                            <p>{{ me.comentario }}</p>
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                {% if me.username == request.user.username %}
+                                    <div class="message">
+                                        <div class="icon" style="color: green">
+                                            <span class="material-symbols-outlined">forward</span>
+                                        </div>
+                                            <b>Comentario:</b>
+                                            <p>{{me.comentario}}</p>
+                                            <b>Respuesta del Admin: </b>
+                                            <br>
+                                        <small class="text-muted">Sin respuesta</small>
+                                    </div> 
+                                {% endif %}
+                            {% endif%}
+                        {% endfor%}
+                    {% else %}
+                        <p>No tienes ningun comentario por el momento</p>
+                    {% endif %}
+                </div>
+                <div class="add-products">
+                    <div>
+                        <span class="material-symbols-outlined">add</span> 
+                        <a href="{% url 'soporteEnviar' %}">Mostrar Todas</a>
+                    </div>
+                </div>
+                {% endif %}
+            
+
+            
+            <script>
+                // Obtén todos los elementos con la clase "close-btn"
+                var closeBtns = document.querySelectorAll('.close-btnn');
+
+                // Agrega un evento de clic a cada elemento
+                closeBtns.forEach(function (closeBtn) {
+                    closeBtn.addEventListener('click', function () {
+                        // Oculta el elemento al hacer clic
+                        closeBtn.style.display = 'none';
+                    });
+                });
+            </script>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,747 @@
+/*Modal de agregar datos*/
+/*Boton-Modal*/
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+:root
+{
+    --color-modal: #363949;
+    --color-primary: #7380ec;
+    --color-danger: #ff7782;
+    --color-success: #41f1b6;
+    --color-warning: #ffbb55;
+    --color-white: #fff;
+    --color-info-dark: #7d8da1;
+    --color-info-light: #dce1eb;
+    --color-dark: #363949;
+    --color-light: rgba(132, 139, 200, 0.18);
+    --color-primary-variant: #111e88;
+    --color-dark-variant: #677483;
+    --color-background: #f6f6f9;
+    --color-tabla: #b9b9b9;
+    --campos: #fff;
+    --placeholder: #333;
+
+    --card-border-radius: 2rem;
+    --border-radius-1: 0.4rem;
+    --border-radius-2: 0.8rem;
+    --border-radius-3: 1.2rem;
+
+    --card-padding: 1.8rem;
+    --padding-1: 1.2rem;
+
+    /* --box-shadow: 0 2rem 3rem var(--color-light);  */
+    --box-shadow-v2:rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    --box-shadow: var(--color-light) 0px 13px 27px -5px, var(--color-light) 0px 8px 16px -8px;
+    --box-shadow-v3: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+    --price: #da0303;
+}
+.dark-theme-variables{
+    --color-background: #181a1e;
+    --placeholder: #dfdfdf;
+    --color-white: #202528;
+    --color-dark: #edeffd;
+    --campos: #202528;
+    --color-dark-variant: #a3bdcc;
+    --color-light: rgba(0, 0, 0, 0.4);
+    --box-shadow: 0 2rem 3rem var(--color-light);
+    --price: #F2F7A1;
+}
+.boton-modal{
+    padding: 40px 0px 20px 0px;
+    display: flex;
+    width: 100%;
+}
+.container-modal .content-modal h2,label,input{
+    color: var(---color-dark);
+}
+.container-modal-segundo .content-modal h2,label,input{
+    color: var(---color-dark);
+}
+.container-modal-editar .content-modal-editar h2,label,input{
+    color: var(---color-dark);
+}
+.container-modal .content-modal small{
+    color: var(--placeholder);
+}
+.container-modal-editar .content-modal-editar small{
+    color: var(--placeholder);
+}
+.boton-modal label{
+    padding: 10px 15px;
+    background-color: #5488a3;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 300ms ease;
+    
+}
+.boton-modal label:hover{
+    background-color: #185E83;
+}
+/*Fin Boton-Modal*/
+.cerrar{
+    display: flex; 
+    justify-content: flex-end; 
+    cursor: pointer;
+    color: rgb(144, 144, 144);
+    font-size: 25px;
+}
+.cerrar:hover{
+    color:#e90404;
+}
+/*Ventana Modal*/
+/*Primer modal*/#btn-modal{
+    display: none;
+}
+/*Segundo modal*/#btn-modal-segundo{
+    display: none;
+}
+/*Primer modal*/.container-modal{
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0; left: 0;
+    background-color: rgba( 0.8);
+    backdrop-filter: blur(5px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+/*Segundo modal*/.container-modal-segundo{
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0; left: 0;
+    background-color: rgba(0.8);
+    backdrop-filter: blur(5px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+/*Primer modal*/#btn-modal:checked ~ .container-modal{
+    display: flex;
+}
+/*Segundo modal*/#btn-modal-segundo:checked ~ .container-modal-segundo{
+    display: flex;
+}
+.content-modal{
+    max-width: 90%;
+    padding: 20px;
+    box-shadow: var(--box-shadow-v2);
+    background-color: var(--color-white);
+    border-radius: 20px;
+}
+.content-modal p{
+    padding: 15px 0px;
+    border-top: 1px solid #dbdbdb;
+    border-bottom: 1px solid #dbdbdb;
+}
+.content-modal .btn-cerrar{
+    width: 100%;
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
+}
+.content-modal .btn-cerrar label{
+    border: 1px solid rgb(0, 0, 0);
+    padding: 7px 10px;
+    background-color: #e90404;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 300ms ease;
+}
+.content-modal .btn-cerrar label:hover{
+    background-color: #960808;
+}
+.content-modal .btn-cerrar button{
+    border: 1px solid rgb(0, 0, 0);
+    padding: 7px 10px;
+    margin-right: 10px;
+    background-color: #5488a3;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 300ms ease;
+}
+.content-modal .btn-cerrar button:hover{
+    background-color: #204a60;
+}
+.cerrar-modal{
+    width:100%;
+    height: 100vh;
+    position: absolute;
+    cursor: pointer;
+    top:0; left: 0;
+    z-index: -1;
+}
+@media screen and (max-width:800px) {
+    .content-modal{
+        width: 90%;
+    }
+}
+/*Fin Ventana Modal*/
+/*FIn de Modal de agregar*/
+
+/*Inicio de modal de editar*/
+.container-modal-editar{
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0; left: 0;
+    background-color: rgba(0.8);
+    backdrop-filter: blur(5px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+.content-modal-editar{
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    box-shadow: var(--box-shadow-v2);
+    background-color: var(--color-white);
+    border-radius: 20px;
+}
+.content-modal-editar .btn-cerrar{
+    width: 100%;
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
+}
+.content-modal-editar .btn-cerrar label{
+    border: 1px solid rgb(0, 0, 0);
+    padding: 7px 10px;
+    background-color: #e90404;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 300ms ease;
+}
+.content-modal-editar .btn-cerrar label:hover{
+    background-color: #960808;
+}
+.content-modal-editar .btn-cerrar button{
+    border: 1px solid rgb(0, 0, 0);
+    padding: 7px 10px;
+    margin-right: 10px;
+    background-color: #5488a3;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 300ms ease;
+}
+.content-modal-editar .btn-cerrar button:hover{
+    background-color: #204a60;
+}
+/*Fin de modal de editar*/
+
+/*Inicio de las columnas*/
+.form-columns {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-column {
+    flex: 1;
+    margin-right: 1rem; /* Espacio entre las columnas */
+}
+
+.form-column:last-child {
+    margin-right: 0; /* Elimina el espacio en la última columna */
+}
+/*Fin de las columnas*/
+
+/*Diseño de los apartados de los modales*/
+.titulo-modal, h4{
+    color: var(--color-dark);
+    text-transform: uppercase;
+    text-align: center;
+    margin-right: 0.2rem;
+}
+.divisor{
+    margin-top: 2rem;
+}
+.divisorv2{
+    margin-top: 1rem;
+}
+.divisorv2 .titulo{
+    color: var(---color-dark);
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 1rem;
+}
+.divisorv2 .subtitulo{
+    font-size: 1rem;
+    color: var(---color-dark);
+    font-weight: bold;
+    margin-top: 1rem;
+}
+.subtitulo{
+    color: var(---color-dark);
+    font-size: 1rem;
+    display: flex;
+}
+hr{
+    height: 0.1rem;
+    background-color: var(--color-dark);
+    opacity: 0.2;
+}
+.titulo{
+    color: var(---color-dark);
+    font-size: 1rem;
+    font-weight: bold;
+}
+.campos{
+    border: 1px solid var(--color-dark);
+    border-radius: 5px;
+    padding: 5px;
+    align-items: center;
+    background-color: var(--campos);
+}
+.campos::placeholder{
+    color: var(--placeholder);
+}
+.campos-seleccion{
+    width: 100%; /* Ancho del menú desplegable, puedes ajustarlo según tus necesidades */
+    padding: 5px;
+    cursor: pointer;
+    border: 1px solid var(--color-dark);
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: var(--campos);
+    color: var(--placeholder);
+}
+.divisor img{
+    max-width: 150px; 
+    height: 150px
+}
+/*Fin*/
+
+/* Estilo personalizado para el mensaje de alerta */
+.alert-custom {
+    background-color: #4CAF50; /* Color de fondo verde */
+    color: white; /* Color del texto blanco */
+    border: 2px solid #388E3C; /* Borde verde más oscuro */
+    border-radius: 5px; /* Borde redondeado */
+    padding: 10px 20px; /* Espaciado interior */
+    margin-bottom: 10px; /* Espacio entre mensajes */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    display: flex; /* Para alinear elementos horizontalmente */
+    align-items: center; /* Para alinear elementos verticalmente */
+    justify-content: space-between; /* Para espaciar el mensaje y el botón */
+    position: relative; /* Para posicionar el botón de cierre */
+    transition: all 0.3s; /* Transición suave */
+}
+
+/* Estilo para el botón de cierre */
+.alert-custom .btn-close {
+    background-color: transparent;
+    border: none;
+    color: white;
+    position: absolute;
+    top: 50%; /* Centrar verticalmente el botón */
+    right: 10px; /* Espaciado del borde derecho */
+    transform: translateY(-50%); /* Centrar verticalmente el botón */
+    cursor: pointer;
+    transition: transform 0.3s; /* Transición suave */
+}
+
+/* Cambio de color del botón al pasar el mouse */
+.alert-custom:hover .btn-close {
+    transform: translate(0, -50%); /* Mover el botón hacia la izquierda */
+    background-color: transparent; /* Cambia a rojo al pasar el mouse */
+}
+/* Estilos para el menú desplegable */
+
+.imagen:hover .img-container img {
+    transform: scale(2); /* Escala la imagen al 150% */
+    z-index: 1; /* Coloca la imagen ampliada sobre la imagen de abajo */
+}
+.imagen img{
+    max-width: 100px;
+    max-height: 100px;
+}
+.search-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-left: 2rem;
+    width: 50%;
+    justify-content: right;
+}
+
+#search-input {
+    padding: 12px 10px 12px 10px;
+    border-radius: 20px;
+    outline: none;
+    width: 70%;
+    box-shadow: var(--color-light) 0px 13px 27px -5px, var(--color-light) 0px 8px 16px -8px;
+    background-color: var(--color-white);
+    color: var(--color-dark);
+}
+
+#search-icon {
+    position: relative;
+    right: 2rem;
+    color: var(--color-dark-variant); /* Color del ícono */
+    cursor: pointer;
+}
+
+.highlighted {
+    font-weight: bold; /* Cambia el estilo de fuente a tu elección */
+    background-color: var(--color-dark);
+    color: var(--color-white);
+}
+
+/*------------------------------------- MODAL DE REGISTRO DE USUARIOS ----------------------------------------------*/
+
+.content-modal-usuarios{
+    max-width: 90%;
+    padding: 20px;
+    background-color: var(--color-white);
+    border-radius: 20px;
+    overflow: auto;
+    box-shadow: var(--box-shadow-v2);
+}
+
+.content-modal-usuarios p{
+    padding: 15px 0px;
+    border-top: 1px solid #dbdbdb;
+    border-bottom: 1px solid #dbdbdb;
+}
+.content-modal-usuarios .btn-cerrar{
+    width: 100%;
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
+}
+.content-modal-usuarios .btn-cerrar label{
+    border: 1px solid rgb(0, 0, 0);
+    padding: 7px 10px;
+    background-color: #e90404;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 300ms ease;
+}
+.content-modal-usuarios .btn-cerrar label:hover{
+    background-color: #960808;
+}
+.content-modal-usuarios .btn-cerrar button{
+    border: 1px solid rgb(0, 0, 0);
+    padding: 7px 10px;
+    margin-right: 10px;
+    background-color: #5488a3;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 300ms ease;
+}
+.content-modal-usuarios .btn-cerrar button:hover{
+    background-color: #204a60;
+}
+    
+
+.contenedor-imagen {
+    width: 160px;
+    height: 165px;
+    background-color: #ffffff; /* Fondo temporal */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border-width: 6px;
+    border-color: rgb(2, 9, 67);
+    border-style: dashed;
+}
+
+#imagen {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+    /* style="align-items: center; justify-content: center; margin-left: 4rem; */
+
+/* Make circles that indicate the steps of the form: */
+.step {
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #b2b2b2;
+    border: none;  
+    border-radius: 50%;
+    display: inline-block;
+    opacity: 0.5;
+}
+  
+.step.active {
+opacity: 1;
+}
+  
+  /* Mark the steps that are finished and valid: */
+.step.finish {
+background-color: #5488a3;
+}
+
+/* Hide all steps by default: */
+.tab {
+  display: none;
+}
+
+input.invalid {
+    background-color: #ffdddd;
+  }
+
+.titulo-modal_user{
+    color: #363949;
+    text-transform: uppercase;
+    justify-content: center;
+    position: absolute;
+}
+.content-modal_user{
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+.content-modal_user p{
+    padding: 15px 0px;
+    border-top: 1px solid #dbdbdb;
+    border-bottom: 1px solid #dbdbdb;
+}
+.content-modal_user .btn-cerrar{
+    width: 100%;
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
+}
+.content-modal_user .btn-cerrar label{
+    border: 1px solid rgb(0, 0, 0);
+    padding: 7px 10px;
+    background-color: #e90404;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 300ms ease;
+}
+.content-modal_user .btn-cerrar label:hover{
+    background-color: #960808;
+}
+.content-modal_user .btn-cerrar button{
+    border: 1px solid rgb(0, 0, 0);
+    padding: 7px 10px;
+    margin-right: 10px;
+    background-color: #5488a3;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 300ms ease;
+}
+.content-modal_user .btn-cerrar button:hover{
+    background-color: #204a60;
+}
+.cerrar-modal{
+    width:100%;
+    height: 100vh;
+    position: absolute;
+    cursor: pointer;
+    top:0; left: 0;
+    z-index: -1;
+}
+
+@media screen and (max-width:800px) {
+    .content-modal{
+        width: 90%;
+    }
+}
+
+/*Inicio de las columnas*/
+.form-columns_user {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-column_user {
+    flex: 1;
+    margin-right: 1rem; /* Espacio entre las columnas */
+    /* margin-bottom: 1.5rem; */
+    margin: 1.5rem 0 1.5rem 0.5rem;
+}
+
+.form-column:last-child {
+    margin-right: 0; /* Elimina el espacio en la última columna */
+}
+/*Fin de las columnas*/
+
+#vistaPrevia{
+    max-width: 500px;
+    min-height: 300px;
+}
+
+/* -----------------------------------MODAL CAMBIO CONTRA --------------------------------------- */
+.content-modal-contra{
+    max-width: 90%;
+    padding: 20px;
+    background-color: var(--color-white);
+    border-radius: 20px;
+    overflow: auto;
+    box-shadow: var(--box-shadow-v2);
+}
+
+.content-modal-contra p{
+    padding: 15px 0px;
+    border-top: 1px solid #dbdbdb;
+    border-bottom: 1px solid #dbdbdb;
+}
+.content-modal-contra .btn-cerrar{
+    width: 100%;
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
+}
+.content-modal-contra .btn-cerrar label{
+    border: 1px solid rgb(0, 0, 0);
+    padding: 7px 10px;
+    background-color: #e90404;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 300ms ease;
+}
+.content-modal-contra .btn-cerrar label:hover{
+    background-color: #960808;
+}
+.content-modal-contra .btn-cerrar button{
+    border: 1px solid rgb(0, 0, 0);
+    padding: 7px 10px;
+    margin-right: 10px;
+    background-color: #5488a3;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 300ms ease;
+}
+.content-modal-contra .btn-cerrar button:hover{
+    background-color: #204a60;
+}
+
+.modal-img-contra{
+    width: 18rem;
+    height: auto;
+    margin: 0.5rem 0 0.5rem 3rem;
+}
+
+.sub-contra{
+    color: var(--color-dark);
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* -----------------------------------MODAL DESCRIPCIÓN --------------------------------------- */
+.custom-form-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+  
+  .custom-form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  
+  .custom-form-control {
+    display: block;
+    width: 40rem;
+    min-height: 12rem;
+    padding: 0.75rem;
+    font-size: 1.2rem;
+    line-height: 1.25;
+    color: var(--color-dark);
+    font-weight: 600;
+    background-color: var(---color-dark);
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    resize: none; /* Permitir que el textarea sea redimensionado verticalmente */
+    height: auto; /* Permitir que el textarea crezca automáticamente en altura */
+    overflow-y: hidden;
+  } 
+  /* Resto del código sigue igual */
+  
+  
+  .custom-form-control::placeholder {
+    font-weight: 300;
+  }
+  
+  .custom-form-control:focus {
+    border-color: #4d90fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+    overflow-y: auto; /* Mostrar la barra de desplazamiento vertical cuando el textarea tiene foco */
+  }
+
+
+  /* -----------------------------------IMAGEN PRODUCTO--------------------------------------- */
+  #vistaPreviaPro{
+    max-width: 350px;
+    min-height: 210px;
+}
+
+#vistaPreviaProv{
+    max-width: 270px;
+    min-height: 10px;
+}
+
+.rol-pre{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0.8rem 0 0;
+    text-transform: uppercase;
+}
+
+.check{
+    margin: 0.6rem 0 0 0.5rem;
+}
+
+.titulo-rol{
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 1.3rem;
+    font-weight: bold;
+    display: flex;
+    margin-right: 2rem;
+    justify-content: center;
+}
+
+.content-check{
+    justify-content: space-between;
+    /* display: grid; */
+}
+
+.mitad-v2{
+    /* display: flex; */
+    width: 100%;
+    margin: 0 auto;
+    /* gap: 1rem; */
+    grid-template-columns: 48% 48%;
+    justify-content: space-between;
+}
+
+.permisos{
+    display: grid;
+}
+
+.input-rol{
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(223, 12, 65)
+}

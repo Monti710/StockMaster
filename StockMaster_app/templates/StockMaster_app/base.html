@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}StockMaster{% endblock %}</title>
+
+    <!--Codigos de estilos-->
+    <link  rel="stylesheet" href="{% static 'css/menu.css' %}">
+    <link  rel="stylesheet" href="{% static 'css/buscadores.css' %}">
+    <link  rel="stylesheet" href="{% static 'css/targetas.css' %}">
+    <link  rel="stylesheet" href="{% static 'css/modal.css' %}">
+    <link  rel="stylesheet" href="{% static 'css/botones.css' %}">
+    <link  rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <link  rel="stylesheet" href="{% static 'css/estructura.css' %}">
+    <link  rel="stylesheet" href="{% static 'css/acercaDe.css' %}">
+
+    <!--Icon-->
+    <link rel="icon" type="image/png" href="{% static 'productos/img/eto2.jpg' %}">
+
+    <!--Fuentes-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+</head>
+<body>
+    
+    <div class="container">
+        <!--Menú-->
+        <aside>
+            <div class="top">
+                <div class="logo">
+                    <img src="{% static 'productos/img/eto2.jpg' %}" alt="">
+                    <h2>Stock <span class="bluee">Master</span></h2>
+                </div>
+                <div class="close" id="close-btn">
+                    <span class="material-symbols-outlined">close</span>
+                </div>
+            </div>
+            <div class="sidebar">
+                {% if perms.StockMaster_app.view_marca %}
+                    <a href="{% url 'actividades' %}" class="main-menu-link active">
+                        <span class="material-symbols-outlined">grid_view</span>
+                        <h3>Principal</h3>
+                    </a>
+                {% endif %}
+                {% if perms.StockMaster_app.delete_marca %}
+                    <a href="{% url 'inventario' %}" class="main-menu-link active">
+                        <span class="material-symbols-outlined">receipt_long</span>
+                        <h3>Inventario</h3>
+                    </a>
+                {% endif %}
+                {% if perms.StockMaster_app.view_productos or perms.StockMaster_app.view_proveedores or perms.StockMaster_app.view_area or perms.StockMaster_app.view_categoria or perms.StockMaster_app.add_productos %}
+                    <a class="submenu-trigger has-submenu active" data-submenu-id="submenu_gestion" data-submenu-state="closed">
+                        <span class="material-symbols-outlined">supervisor_account</span>
+                        <h3>Administración</h3>
+                        <i class="submenu-icon fas fa-chevron-right"></i>
+                    </a>
+                    <div class="submenu-container active">
+                        <div class="submenu">
+                            <div style="margin-left: 1rem;">
+                                {% if perms.StockMaster_app.view_productos %}
+                                    <a href="{% url 'productos' %}" class="active">
+                                        <span class="material-symbols-outlined">inventory</span>
+                                        <h3>Productos</h3>
+                                    </a>
+                                {% endif %}
+                                {% if perms.StockMaster_app.view_proveedores %}
+                                    <a href="{% url 'prov' %}" class="active">
+                                        <span class="material-symbols-outlined">local_shipping</span>
+                                        <h3>Proveedores</h3>
+                                    </a>
+                                {% endif %}
+                                {% if perms.StockMaster_app.add_productos %}
+                                <a href="{% url 'ordenes' %}">
+                                    <span class="material-symbols-outlined">orders</span>
+                                    <h3>Ordenes</h3>
+                                </a>
+                                {% endif %}
+                                {% if perms.StockMaster_app.view_area %}
+                                    <a href="{% url 'area' %}" class="active">
+                                        <span class="material-symbols-outlined">workspaces</span>
+                                        <h3>Areas</h3>
+                                    </a>
+                                {% endif %}
+                                {% if perms.StockMaster_app.view_categoria %}
+                                    <a href="{% url 'etiquetas' %}" class="active">
+                                        <span class="material-symbols-outlined">bookmarks</span>
+                                        <h3>Etiquetas</h3>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if perms.StockMaster_app.delete_productos or perms.StockMaster_app.delete_proveedores or perms.StockMaster_app.delete_area or perms.StockMaster_app.delete_categoria %}
+                    <a class="submenu-trigger has-submenu active" data-submenu-id="submenu_recuperacion" data-submenu-state="closed">
+                        <span class="material-symbols-outlined">restart_alt</span>
+                        <h3>Recuperacion</h3>
+                        <i class="submenu-icon fas fa-chevron-right rotate-icon"></i>
+                    </a>
+                    <div class="submenu-container active">
+                        <div class="submenu">
+                            <div style="margin-left: 1rem;">
+                                {% if perms.StockMaster_app.delete_productos %}
+                                    <a href="{% url 'recuperar_producto' %}" class="active">
+                                        <span class="material-symbols-outlined">inventory_2</span>
+                                        <h3>Productos</h3>
+                                    </a>
+                                {% endif %}
+                                {% if perms.StockMaster_app.delete_proveedores %}
+                                    <a href="{% url 'recuperar_proveedor' %}" class="active">
+                                        <span class="material-symbols-outlined">conveyor_belt</span>
+                                        <h3>Proveedores</h3>
+                                    </a>
+                                {% endif %}
+                                {% if perms.StockMaster_app.delete_area %}
+                                    <a href="{% url 'recuperar_designaciones' %}" class="active">
+                                        <span class="material-symbols-outlined">license</span>
+                                        <h3>Designaciones</h3>
+                                    </a>
+                                {% endif %}
+                                {% if perms.StockMaster_app.delete_categoria %}
+                                    <a href="{% url 'recuperar_etiquetas' %}" class="active">
+                                        <span class="material-symbols-outlined">collections_bookmark</span>
+                                        <h3>Etiquetas</h3>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if perms.StockMaster_app.view_usuario or perms.StockMaster_app.view_rolextra %}
+                    <a class="submenu-trigger has-submenu active" data-submenu-id="submenu_supervision" data-submenu-state="closed">
+                        <span class="material-symbols-outlined">person </span>
+                        <h3>Usuarios</h3>
+                        <i class="submenu-icon fas fa-chevron-right rotate-icon"></i>
+                    </a>
+                    <div class="submenu-container active">
+                        <div class="submenu">
+                            <div style="margin-left: 1rem;">
+                                {% if perms.StockMaster_app.view_rolextra %}
+                                    <a href="{% url 'rol' %}" class="active">
+                                        <span class="material-symbols-outlined">groups</span>
+                                        <h3>Roles</h3>
+                                    </a>
+                                {% endif %}
+                                {% if perms.StockMaster_app.view_usuario %}
+                                    <a href="{% url 'usuarios' %}" class="active">
+                                        <span class="material-symbols-outlined">person_add</span>
+                                        <h3>Agregar</h3>
+                                    </a>
+                                {% endif %}
+                                {% if perms.StockMaster_app.delete_usuario %}
+                                    <a href="{% url 'recuperar_usuario' %}" class="active">
+                                        <span class="material-symbols-outlined">person_check</span>
+                                        <h3>Recuperacion</h3>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if perms.StockMaster_app.view_historial or perms.StockMaster_app.add_historial or perms.StockMaster_app.change_historial or perms.StockMaster_app.delete_historial %}
+                    <a class="submenu-trigger has-submenu active" data-submenu-id="submenu_historial" data-submenu-state="closed">
+                        <span class="material-symbols-outlined">history_toggle_off</span>
+                        <h3>Historial</h3>
+                        <i class="submenu-icon fas fa-chevron-right rotate-icon"></i>
+                    </a>
+                    <div class="submenu-container active">
+                        <div class="submenu">
+                            <div style="margin-left: 1rem;">
+                                {% if perms.StockMaster_app.view_historial %}
+                                    <a href="{% url 'historial' %}" class="active">
+                                        <span class="material-symbols-outlined">schedule</span>
+                                        <h3>General</h3>
+                                    </a>
+                                {% endif %}
+                                {% if perms.StockMaster_app.add_historial %}
+                                    <a href="{% url 'historialModificaciones' %}" class="active">
+                                        <span class="material-symbols-outlined">history</span>
+                                        <h3>Modificaciones</h3>
+                                    </a>
+                                {% endif %}
+                                {% if perms.StockMaster_app.change_historial %}
+                                    <a href="{% url 'historialMovimientos' %}" class="active">
+                                        <span class="material-symbols-outlined">update</span>
+                                        <h3>Movimientos</h3>
+                                    </a>
+                                {% endif %}
+                                {% if perms.StockMaster_app.delete_historial %}
+                                    <a href="{% url 'historialEliminados' %}" class="active">
+                                        <span class="material-symbols-outlined">delete_history</span>
+                                        <h3>Eliminados</h3>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if perms.StockMaster_app.view_mensajes or perms.StockMaster_app.delete_mensajes or perms.StockMaster_app.delete_rolextra %}
+                    <a class="submenu-trigger has-submenu active" data-submenu-id="submenu_configuracion" data-submenu-state="closed">
+                        <span class="material-symbols-outlined">settings</span>
+                        <h3>Configuración</h3>
+                        <i class="submenu-icon fas fa-chevron-right rotate-icon"></i>
+                    </a>
+                    <div class="submenu-container active">
+                        <div class="submenu">
+                            <div style="margin-left: 1rem;">
+                                {% if perms.StockMaster_app.view_mensajes %}
+                                    <a href="{% url 'soporte' %}" class="main-menu-link active">
+                                        <span class="material-symbols-outlined">report_gmailerrorred</span>
+                                        <h3>Soporte</h3>
+                                        <span class="message-count">
+                                            {% if cantidad_mensajes > 0 %}
+                                                {{ cantidad_mensajes }}
+                                            {% else %}
+                                            0
+                                            {% endif %}
+                                        </span>
+                                    </a>
+                                {% endif %}
+                                {% if perms.StockMaster_app.delete_mensajes %}
+                                    <a href="{% url 'soporteEnviar' %}" class="main-menu-link active">
+                                        <span class="material-symbols-outlined">report_gmailerrorred</span>
+                                        <h3>Soporte</h3>
+                                        <span class="message-count">
+                                            {% if cantidad_mensajes > 0 %}
+                                                {{ cantidad_mensajes }}
+                                            {% else %}
+                                            0
+                                            {% endif %}
+                                        </span>
+                                    </a>
+                                {% endif %}
+                                {% if perms.StockMaster_app.delete_rolextra %}
+                                    <a href="{% url 'cambio_password' %}" class="main-menu-link active">
+                                        <span class="material-symbols-outlined">manage_accounts</span>
+                                        <h3>Perfil</h3>
+                                    </a>
+                                {% endif %}
+                                <a href="{% url 'acercaDe' %}" class="main-menu-link active">
+                                    <span class="material-symbols-outlined">account_circle</span>
+                                    <h3>Acerca de...</h3>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                
+                <a href="{% url 'exit' %}" class="main-menu-link active btnCerrarSesion">
+                    <span class="material-symbols-outlined">logout</span>
+                    <h3>Cerrar Sesion</h3>
+                </a>
+            </div>
+        </aside>
+        <!--Fin Menú-->
+
+        <!--Contenido-->
+        {% block body %}
+        {% endblock %}
+        <!--Fin del contenido-->
+
+    </div>
+
+<script>
+    $(document).ready(function(){
+        // show stats on Mouseover
+        $('.product-card').hover(function(){
+            $(this).addClass('animate');
+            $('div.carouselNext, div.carouselPrev').addClass('visible');
+        }, function(){
+            $(this).removeClass('animate');
+            $('div.carouselNext, div.carouselPrev').removeClass('visible');
+        });
+    });
+</script>
+
+
+    <!--Scripts-->
+    <script src="{% static 'js/menu.js' %}"></script>
+    <script src="{% static 'js/busquedas.js' %}"></script>
+    <script src="{% static 'js/inventario.js' %}"></script>
+    <script src="{% static 'js/modalEditar.js' %}"></script>
+    <script src="{% static 'js/todoModal.js' %}"></script>
+    <script src="{% static 'js/submenu.js'%}"></script>
+    <script src="{% static 'usuarios/js/aviso.js' %}"></script>
+    <script src="{% static 'js/mensajeOculto.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!--Fin Scripts-->
+</body>
+</html>

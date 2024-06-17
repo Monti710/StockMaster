@@ -1,0 +1,133 @@
+{% extends "./base.html" %}
+{% block body %}
+{% load static %}
+<div class="right-v2" >
+    <div class="top">
+        <div class="tema">
+            <button id="menu-btn"><span class="material-symbols-outlined">menu</span>
+            </button>
+            <button id="themeToggleBtn" >
+                <i id="sunIcon" class="fas fa-sun"></i>
+                <i id="moonIcon" class="fas fa-moon"></i>
+            </button>
+        </div>
+        <div class="profile">
+            {% if request.user.is_authenticated %}
+                <div class="info">
+                    <p>Hola, <b>{{ user.username}}</b> </p>
+                    <p style="text-align: center;">
+                        BIENVENIDO
+                    </p>
+                </div>
+                <div class="profile-photo">
+                    {% for user in usuarios %}
+                        {% if user.id_id == request.user.id %}
+                            {% if user.imagen %}
+                                <img class="fa-solid fa-user-tie"src="{{ user.imagen_url }}" alt="Imagen del usuario">
+                            {% else %}
+                                <p>No hay imagen disponible.</p>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>  
+</div>
+<main>
+    <h1>Soporte Tecnico</h1>
+    <div class="recent-orders">
+        
+        <div class="principal">
+            <div class="search-bar-v2">
+                <input type="text" id="search-input" placeholder="Buscar productos..." oninput="convertToUppercase()">
+                <i class="fas fa-search" id="search-icon"></i>
+            </div>
+        </div>
+        <br>
+        <!-- Muestra mensajes existentes -->
+        <div class="messages-container">
+            {% for message in messages %}
+                <div class="alert alert-custom" role="alert">
+                    <strong>{{ message }}</strong>
+                    <button type="button" class="btn-close" aria-label="Close" onclick="dismissMessage(this)"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            {% endfor %}
+        </div>
+        <div style="overflow:auto; height: 450px;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th><h2>Usuario</h2></th>
+                        <th><h2>Mensaje</h2></th>
+                        <th><h2>Respuesta</h2></th>
+                        <th><h2>Fecha</h2></th>
+                        <th><h2>Contestar</h2></th>
+                        <th><h2>Eliminar</h2></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if Mensajes %}
+                        {% for mensaje in Mensajes|dictsortreversed:"tiempo_creacion"%}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>
+                                    <h4>{{ mensaje.username}}:</h4>
+                                </td>
+                                <td>
+                                    {{ mensaje.comentario }}
+                                </td>
+                                <td>
+                                    {% if mensaje.respuestascomentarios %}
+                                    {{ mensaje.respuestascomentarios }}
+
+                                    {% else %}
+                                        <p>No tiene respuestas </p>
+
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {{ mensaje.tiempo_creacion }}
+                                </td>
+                                <td>
+                                    <div id="contenedor">
+                                        <form method="post" action="{% url 'contestarcomentarios' mensaje.idcomentario %}">
+                                            <br>
+                                            {% csrf_token %}
+                                            <textarea id="respuestascomentarios" name="respuestascomentarios" style="resize: none; border: 20px;" required></textarea>
+                                            <button class="edita" type="submit" id="botonOcultar" style="background: transparent;">
+                                                <i class="fa-solid fa-paper-plane" style="color: rgb(13, 13, 221); font-size: 20px; cursor:pointer"></i>
+                                            </button>
+                                        </form>                                        
+                                    </div>
+                                    <br>
+                                </td>  
+                                <td class="elimina" style="padding-left: 2.5rem;">
+                                    <a href="{% url 'eliminar_comentario' mensaje.idcomentario %}" class="btn btn-danger btnEliminacion">
+                                        <span class="material-symbols-outlined">delete</span>
+                                    </a>
+                                </td>
+                                                                
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <br>
+                        <p style="color: #787878; font-size: 15px;">No hay mensajes disponibles en este momento.</p>
+                        <br>
+                    {% endif %}             
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<script>
+    // Función para eliminar el mensaje al hacer clic en el botón de cerrar
+    function dismissMessage(button) {
+        const messageContainer = button.closest('.alert');
+        if (messageContainer) {
+            messageContainer.remove();
+        }
+    }
+</script>
+{% endblock %}
