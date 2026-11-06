@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import Group, Permission
 from django import forms
@@ -171,7 +172,7 @@ def signup(request):
 
                 # Envío de correo de bienvenida
                 subject = 'Bienvenido a nuestra aplicación'
-                from_email = 'REMOVED_SENSITIVE_VALUE'
+                from_email = settings.DEFAULT_FROM_EMAIL
                 recipient_list = [email]
 
                 accept_link = 'http://127.0.0.1:8000/signin/?next=/actividades/'
@@ -258,7 +259,7 @@ def cambio(request, uidb64, token):
 
                 # Envia un correo electrónico al usuario notificando el cambio de contraseña
                 subject = 'Cambio de Contraseña'
-                from_email = 'REMOVED_SENSITIVE_VALUE'
+                from_email = settings.DEFAULT_FROM_EMAIL
                 
                 try:
                     send_mail(subject, '', from_email, [user.email], fail_silently=False, html_message=message_html)
@@ -286,7 +287,7 @@ def permiso(request, id):
 
             # Envia un correo electrónico al usuario notificando el cambio de contraseña
         subject = 'Cambio de Contraseña'
-        from_email = 'REMOVED_SENSITIVE_VALUE'
+        from_email = settings.DEFAULT_FROM_EMAIL
         messages.success(request, 'Permiso Enviado')
         try:
                 send_mail(subject, '', from_email, [user.email], fail_silently=False, html_message=message_html)
@@ -314,7 +315,7 @@ def cambio_password(request):
 
             # Envia un correo electrónico al usuario notificando el cambio de contraseña
             subject = 'Cambio de Contraseña'
-            from_email = 'REMOVED_SENSITIVE_VALUE'
+            from_email = settings.DEFAULT_FROM_EMAIL
             
             try:
                 send_mail(subject, '', from_email, [user.email], fail_silently=False, html_message=message_html)
@@ -2382,12 +2383,19 @@ def terminosYcondiones(request):
                 Usuarios.imagen_url = get_imagen_url(Usuarios.imagen)
         return render(request, 'StockMaster_app/TerminosDe.html', {'Usuario':form, 'Mensajes':mensajes, 'cantidad_mensajes':cantidad_mensajes, 'usuarios':usuario, 'Usuario':form})
 
+@login_required(login_url='signin')
 def enviar_correo(request):
+    if not request.user.is_superuser:
+        return HttpResponse('No autorizado.', status=403)
+    if request.method != 'POST':
+        return HttpResponse('Se requiere POST.', status=405)
+    if not settings.SUPPORT_EMAIL:
+        return HttpResponse('Configura SUPPORT_EMAIL para habilitar el correo de prueba.', status=503)
     send_mail(
         'Asunto del Correo',
         'Cuerpo del Correo',
-        'REMOVED_SENSITIVE_VALUE',         # Reemplaza con tu dirección de correo
-        ['REMOVED_SENSITIVE_VALUE'],  # Reemplaza con la dirección del destinatario
+        settings.DEFAULT_FROM_EMAIL,         # Reemplaza con tu dirección de correo
+        [settings.SUPPORT_EMAIL],  # Reemplaza con la dirección del destinatario
         fail_silently=False,
     )
     return HttpResponse('Correo enviado correctamente.')
@@ -2447,7 +2455,7 @@ def nuevaOrden(request):
         orden.save()
         messages.success(request, '¡Pedido Enviado!')
         subject = f"Pedido de Inventario {nombreProducto}"
-        from_email = 'REMOVED_SENSITIVE_VALUE'
+        from_email = settings.DEFAULT_FROM_EMAIL
         recipient_list = [emailProv]
     
         # Crear el mensaje en formato HTML
@@ -2474,7 +2482,7 @@ def eliminarOrden(request, id_Orden):
         historial = Historial(movimiento='Orden Cancelada',usuario=request.user.username,fecha=timezone.now(),nombre=orden.no_Orden)
          
         subject = f"Cancelacion de orden {orden.no_Orden}"
-        from_email = 'REMOVED_SENSITIVE_VALUE'
+        from_email = settings.DEFAULT_FROM_EMAIL
         recipient_list = [orden.emailProv]
         pedido_html = render_to_string('StockMaster_app/CorreoCancelacion.html', {'orden': orden, 'username': request.user.username})
         try:
@@ -2493,7 +2501,7 @@ def find_user_view(request):
 
         # print(photo)
         decoded_file = base64.b64decode(str_img)
-        print(decoded_file)
+        # Captures must not be written to application logs.
 
         x = Log()
         x.photo.save('upload.png', ContentFile(decoded_file))

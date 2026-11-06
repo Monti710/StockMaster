@@ -1,0 +1,8 @@
+# Legacy compatibility baseline; upgrade Django before production use.
+Django>=4.2,<5.0
+mysqlclient
+Pillow
+numpy
+pytz
+face-recognition
+python-dotenv

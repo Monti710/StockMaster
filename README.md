@@ -31,7 +31,7 @@ StockMaster centraliza el registro de productos, el control de existencias y la 
 
 ## Estado y compatibilidad
 
-El repositorio contiene código de una aplicación existente, pero no incluye `requirements.txt` ni un archivo de bloqueo de dependencias. Las migraciones indican Django 3.2.23 y la cabecera de configuración menciona Django 4.2.4.
+El repositorio contiene código de una aplicación existente, con dependencias declaradas en `requirements.txt`, sin un archivo de bloqueo de versiones completas. Las migraciones indican Django 3.2.23 y la cabecera de configuración menciona Django 4.2.4.
 
 La instalación siguiente sirve como punto de partida para reproducir el proyecto localmente; no representa una combinación de versiones validada mediante ejecución. Se utiliza Django 4.2 para conservar compatibilidad con las migraciones actuales: estas importan `django.utils.timezone.utc`, un alias eliminado en Django 5.0. Consulta el [calendario de cambios de Django](https://docs.djangoproject.com/en/5.0/internals/deprecation/).
 
@@ -73,7 +73,7 @@ source .venv/bin/activate
 
 ```bash
 python -m pip install --upgrade pip
-python -m pip install "Django>=4.2,<5.0" mysqlclient Pillow numpy pytz face-recognition
+python -m pip install -r requirements.txt
 ```
 
 Esta lista se deriva de la configuración y los imports del proyecto. `face-recognition` depende de `dlib`, cuya instalación puede requerir CMake y un compilador C++. Windows no cuenta con soporte oficial de esa biblioteca; consulta sus [instrucciones de instalación](https://github.com/ageitgey/face_recognition#installation).
@@ -88,44 +88,29 @@ Con MySQL en ejecución, crea una base vacía desde su cliente:
 CREATE DATABASE stockmaster CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-Configura `DATABASES` en `StockMaster/settings.py` con los datos de tu instalación:
+### 5. Configurar el entorno local
 
-```python
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'stockmaster',
-        'USER': 'tu_usuario_mysql',
-        'PASSWORD': 'tu_password_mysql',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-    }
-}
-```
-
-El proyecto configura estos valores directamente en Python; no incluye carga automática de `.env`. No publiques credenciales reales en el repositorio.
-
-### 5. Ajustar la configuración local
-
-En `StockMaster/settings.py`:
-
-- Sustituye `SECRET_KEY` por una clave propia de tu entorno.
-- Limita `ALLOWED_HOSTS` a `['localhost', '127.0.0.1']` para la prueba local.
-- La configuración de `STATICFILES_DIRS` apunta a una carpeta `static/` en la raíz que no está incluida. Créala si la necesitas o retira esa entrada; los recursos existentes están en `StockMaster_app/static/`.
-
-Para generar una clave de Django:
+Copia `.env.example` como `.env` y configura `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST` y `DB_PORT` para una cuenta MySQL propia. El archivo `.env` está excluido de Git; nunca lo publiques.
 
 ```bash
-python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+# Git Bash, Linux o macOS
+cp .env.example .env
+
+# PowerShell (alternativa)
+Copy-Item .env.example .env
 ```
 
-Para probar las funciones de correo sin enviar mensajes reales, utiliza:
+Genera una clave nueva y coloca el resultado en `DJANGO_SECRET_KEY` dentro de `.env`:
 
-```python
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+```bash
+python -c "import secrets; print(secrets.token_urlsafe(64))"
 ```
 
-Los correos aparecerán en la terminal. Para envío real, configura un servicio SMTP propio y revisa también los remitentes definidos en `StockMaster_app/views.py`.
+La aplicación exige una clave y se detiene si falta. Para desarrollo local establece `DJANGO_DEBUG=True`; conserva `False` en producción. `DJANGO_ALLOWED_HOSTS` admite una lista de hosts separados por comas.
+
+El correo utiliza la consola de forma predeterminada. Para activar SMTP, configura `EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend` junto con `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_USE_TLS`, `EMAIL_HOST_USER`, una credencial nueva en `EMAIL_HOST_PASSWORD` y un `DEFAULT_FROM_EMAIL` autorizado. `SUPPORT_EMAIL` configura el destinatario del correo de prueba; ese endpoint requiere un superusuario y una solicitud POST.
+
+Los valores del entorno del proceso tienen prioridad sobre `.env`. Los archivos subidos se guardan en `media/`, que también está excluido de Git. `STATICFILES_DIRS` solo incluye la carpeta raíz `static/` si existe.
 
 ### 6. Aplicar migraciones y crear un administrador
 
@@ -135,7 +120,7 @@ python manage.py migrate
 python manage.py createsuperuser
 ```
 
-Utiliza una base vacía para este procedimiento. Los archivos `stockmaster.sql` y `stockmaster2.sql` son respaldos existentes y no son necesarios para crear las tablas desde las migraciones. No los importes sobre esta instalación sin revisar su esquema y contenido.
+Utiliza una base vacía para este procedimiento. Los respaldos con datos de usuarios se retiraron del repositorio; las tablas se crean con las migraciones. Carga únicamente datos de prueba propios.
 
 ### 7. Iniciar el servidor
 
@@ -157,7 +142,7 @@ Abre [http://127.0.0.1:8000/signin/](http://127.0.0.1:8000/signin/) e inicia ses
 
 El acceso facial se encuentra en `/login/` y utiliza fotografías asociadas al modelo `Profile`. Las capturas se registran mediante el modelo `Log`.
 
-Para probarlo, prepara perfiles con fotografías válidas y accesibles, permite el uso de la cámara en el navegador y verifica la configuración de almacenamiento de archivos. `MEDIA_ROOT` y `MEDIA_URL` no están definidos en la configuración incluida; deben ajustarse si se desea controlar la ubicación y publicación de las imágenes.
+Para probarlo, prepara perfiles con fotografías válidas y accesibles, permite el uso de la cámara en el navegador y verifica la configuración de almacenamiento de archivos. `MEDIA_ROOT` apunta a `media/` y `MEDIA_URL` a `/media/`. La publicación de imágenes debe configurarse según el entorno, con controles de acceso apropiados; definir estas opciones no publica los archivos automáticamente.
 
 Este módulo requiere validación adicional antes de utilizarse como mecanismo de autenticación en producción. Usa imágenes de prueba con autorización de sus participantes.
 
@@ -177,9 +162,11 @@ StockMaster/
 │   ├── utils.py               # Utilidades de reconocimiento facial
 │   └── views.py               # Control de solicitudes
 ├── profiles/                  # Perfiles y fotografías de usuarios
-├── logs/                      # Modelos de registros y capturas existentes
-├── stockmaster.sql            # Respaldo de base de datos
-├── stockmaster2.sql           # Respaldo alternativo
+├── logs/                      # Modelos y migraciones de registros
+├── .env.example               # Plantilla sin secretos
+├── .gitignore                 # Exclusiones de archivos privados
+├── requirements.txt           # Dependencias del proyecto
+├── SECURITY.md                # Rotación y limpieza tras exposición
 └── README.md
 ```
 
@@ -207,9 +194,9 @@ El acceso a las secciones depende de los permisos asignados al usuario.
 ## Consideraciones del repositorio
 
 - Los archivos `tests.py` incluidos son plantillas y no contienen pruebas funcionales implementadas.
-- La configuración actual contiene valores sensibles escritos directamente en el código. Deben sustituirse y, si se han compartido, rotarse antes de un uso real.
-- Revisa y anonimiza los respaldos SQL y las capturas antes de distribuirlos.
-- Añade reglas de exclusión para entornos virtuales, secretos, archivos `__pycache__`, respaldos privados y archivos cargados por usuarios.
+- La configuración utiliza variables de entorno o un `.env` local excluido de Git.
+- Los respaldos SQL, las capturas de acceso y los archivos compilados se excluyen del repositorio.
+- Si utilizaste una copia anterior con credenciales incluidas, sigue [SECURITY.md](SECURITY.md): limpiar Git no revoca credenciales ni elimina copias ajenas.
 - Para producción, desactiva `DEBUG`, restringe los hosts y configura un servidor de aplicaciones; `runserver` se utiliza aquí únicamente para desarrollo local.
 
 ## Equipo
